@@ -10,7 +10,7 @@ import (
 //CreateOrder создает новый заказ
 func (s *postgresStorage) CreateOrder(ctx context.Context, o model.Order) (dublicateOrder, anotherUserOrder bool, err error) {
 	var userLogin, orderNum int
-	// Проверяем, что заказа еще не создавалось
+	// Проверяем, что заказа еще нет в БД
 	s.DB.QueryRowContext(ctx, "SELECT userlogin, ID from Users WHERE ID = $1", orderNum).Scan(&userLogin, &orderNum)
 	if userLogin != o.User.Login && orderNum != 0 {
 		return true, true, nil

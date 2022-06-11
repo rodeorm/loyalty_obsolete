@@ -59,7 +59,7 @@ func (s postgresStorage) createOperationTypesTable(ctx context.Context) error {
 	_, err := s.DB.ExecContext(ctx,
 		"CREATE TABLE IF NOT EXISTS  OperationTypes"+
 			"("+
-			"	ID SERIAL PRIMARY KEY"+
+			"	ID INT PRIMARY KEY"+
 			"	, Name VARCHAR(10) NOT NULL"+
 			"	, Const VARCHAR(10) NOT NULL"+
 			"); "+
@@ -68,9 +68,9 @@ func (s postgresStorage) createOperationTypesTable(ctx context.Context) error {
 			"	Name"+
 			"	, Const"+
 			")"+
-			"SELECT 'Начисление', 'add' "+
+			"SELECT 1, 'Начисление', 'add' "+
 			"UNION ALL "+
-			"SELECT 'Списание', 'remove';")
+			"SELECT 2, 'Списание', 'remove';")
 
 	if err != nil {
 		fmt.Println(err)
@@ -83,7 +83,7 @@ func (s postgresStorage) createOrderStatusesTable(ctx context.Context) error {
 	_, err := s.DB.ExecContext(ctx,
 		"CREATE TABLE IF NOT EXISTS  OrderStatuses"+
 			"("+
-			"ID SERIAL PRIMARY KEY"+
+			"ID INT PRIMARY KEY"+
 			", Name VARCHAR(150) NOT NULL"+
 			", Const VARCHAR(20) NOT NULL"+
 			");"+
@@ -92,13 +92,13 @@ func (s postgresStorage) createOrderStatusesTable(ctx context.Context) error {
 			"Name"+
 			", Const"+
 			")"+
-			"SELECT 'Заказ загружен в систему, но не попал в обработку', 'NEW'"+
+			"SELECT 1, 'Заказ загружен в систему, но не попал в обработку', 'NEW'"+
 			" UNION ALL "+
-			"SELECT 'Вознаграждение за заказ рассчитывается', 'PROCESSING'"+
+			"SELECT 2, 'Вознаграждение за заказ рассчитывается', 'PROCESSING'"+
 			" UNION ALL "+
-			"SELECT 'Cистема расчёта вознаграждений отказала в расчёте', 'INVALID'"+
+			"SELECT 3, 'Cистема расчёта вознаграждений отказала в расчёте', 'INVALID'"+
 			" UNION ALL "+
-			"SELECT 'Данные по заказу проверены, и информация о расчёте успешно получена', 'PROCESSED';")
+			"SELECT 4, 'Данные по заказу проверены, и информация о расчёте успешно получена', 'PROCESSED';")
 	if err != nil {
 		fmt.Println("Проблема при создании таблицы со Статусами заказов: ", err)
 		return err
