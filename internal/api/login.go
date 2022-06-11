@@ -6,7 +6,7 @@ import "net/http"
 Хендлер: POST /api/user/login.
 Аутентификация производится по паре логин/пароль.
 */
-func (h Handler) login(w http.ResponseWriter, r *http.Request) {
+func (h Handler) loginPost(w http.ResponseWriter, r *http.Request) {
 	/*
 		Формат запроса:
 		POST /api/user/login HTTP/1.1
@@ -24,4 +24,3 @@ func (h Handler) login(w http.ResponseWriter, r *http.Request) {
 		500 — внутренняя ошибка сервера.
 	*/
 }
-

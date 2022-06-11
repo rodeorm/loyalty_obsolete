@@ -7,7 +7,7 @@ import "net/http"
 Хендлер: GET /api/user/orders.
 Хендлер доступен только авторизованному пользователю. Номера заказа в выдаче должны быть отсортированы по времени загрузки от самых старых к самым новым. Формат даты — RFC3339.
 */
-func (h Handler) ordersGET(w http.ResponseWriter, r *http.Request) {
+func (h Handler) ordersGet(w http.ResponseWriter, r *http.Request) {
 
 	/*
 	   Доступные статусы обработки расчётов:

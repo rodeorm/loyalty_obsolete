@@ -27,25 +27,25 @@ func StartAPI(storage repo.Storage, runAddress, accrualSystemAddress string) err
 	h := Handler{Storage: storage}
 
 	//POST /api/user/register — регистрация пользователя
-	r.HandleFunc("/api/user/register", h.register).Methods(http.MethodPost)
+	r.HandleFunc("/api/user/register", h.registerPost).Methods(http.MethodPost)
 
 	//POST /api/user/login — аутентификация пользователя
-	r.HandleFunc("/api/user/login", h.login).Methods(http.MethodPost)
+	r.HandleFunc("/api/user/login", h.loginPost).Methods(http.MethodPost)
 
 	//POST /api/user/orders — загрузка пользователем номера заказа для расчёта
-	r.HandleFunc("/api/user/orders", h.ordersPOST).Methods(http.MethodPost)
+	r.HandleFunc("/api/user/orders", h.ordersPost).Methods(http.MethodPost)
 
 	//GET /api/user/orders — получение списка загруженных пользователем номеров заказов, статусов их обработки и информации о начислениях
-	r.HandleFunc("/api/user/orders", h.ordersGET).Methods(http.MethodGet)
+	r.HandleFunc("/api/user/orders", h.ordersGet).Methods(http.MethodGet)
 
 	//GET /api/user/balance — получение текущего баланса счёта баллов лояльности пользователя
-	r.HandleFunc("/api/user/balance", h.balance).Methods(http.MethodGet)
+	r.HandleFunc("/api/user/balance", h.balanceGet).Methods(http.MethodGet)
 
 	//POST /api/user/balance/withdraw — запрос на списание баллов с накопительного счёта в счёт оплаты нового заказа
-	r.HandleFunc("/api/user/balance/withdraw", h.balanceWithdraw).Methods(http.MethodPost)
+	r.HandleFunc("/api/user/balance/withdraw", h.balanceWithdrawPost).Methods(http.MethodPost)
 
 	//GET /api/user/balance/withdrawals — получение информации о выводе средств с накопительного счёта пользователем
-	r.HandleFunc("/api/user/balance/withdrawals", h.balanceWithdrawals).Methods(http.MethodPost)
+	r.HandleFunc("/api/user/balance/withdrawals", h.balanceWithdrawalsGet).Methods(http.MethodGet)
 
 	srv := &http.Server{
 		Handler:      r,

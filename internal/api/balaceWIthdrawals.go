@@ -7,7 +7,7 @@ import "net/http"
 Хендлер: GET /api/user/balance/withdrawals.
 Хендлер доступен только авторизованному пользователю. Факты выводов в выдаче должны быть отсортированы по времени вывода от самых старых к самым новым. Формат даты — RFC3339.
 */
-func (h Handler) balanceWithdrawals(w http.ResponseWriter, r *http.Request) {
+func (h Handler) balanceWithdrawalsGet(w http.ResponseWriter, r *http.Request) {
 	/*
 		Получение информации о выводе средств
 		Хендлер: GET /api/user/balance/withdrawals.

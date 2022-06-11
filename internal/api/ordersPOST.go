@@ -8,7 +8,7 @@ import "net/http"
 	Хендлер доступен только аутентифицированным пользователям. Номером заказа является последовательность цифр произвольной длины.
 	Номер заказа может быть проверен на корректность ввода с помощью алгоритма Луна.
 */
-func (h Handler) ordersPOST(w http.ResponseWriter, r *http.Request) {
+func (h Handler) ordersPost(w http.ResponseWriter, r *http.Request) {
 	/*
 	   Формат запроса:
 	   POST /api/user/orders HTTP/1.1
