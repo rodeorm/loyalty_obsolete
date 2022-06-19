@@ -94,9 +94,10 @@ func (s postgresStorage) createOperationsTable(ctx context.Context) error {
 		"CREATE TABLE IF NOT EXISTS Operations"+
 			"("+
 			"ID SERIAL PRIMARY KEY"+
-			", OrderNumber VARCHAR(20) REFERENCES Orders(Number)"+
+			", OrderNumber VARCHAR(20)"+
 			", Sum INT"+
 			", ProcessedTime TIMESTAMP "+
+			", UserLogin VARCHAR(20) REFERENCES Users(login)"+
 			")")
 	if err != nil {
 		fmt.Println("Проблема при создании таблицы с Операциями: ", err)

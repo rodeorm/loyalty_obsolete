@@ -44,7 +44,9 @@ func (h Handler) balanceWithdrawPost(w http.ResponseWriter, r *http.Request) {
 	h.Storage.SelectUserData(ctx, &user)
 	operation := model.Operation{}
 	bodyBytes, _ := ioutil.ReadAll(r.Body)
+
 	err = json.Unmarshal(bodyBytes, &operation)
+	operation.UserLogin = userKey
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return

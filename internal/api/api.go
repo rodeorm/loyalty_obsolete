@@ -23,7 +23,7 @@ import (
 )
 
 //RouterStart запускает веб-сервер
-func StartAPI(storage repo.Storage, runAddress, accrualSystemAddress string) error {
+func StartAPI(storage repo.Storage, runAddress string) error {
 	h := Handler{Storage: storage}
 
 	// Те, кто НЕ попадают под middleware проверку аутентификации

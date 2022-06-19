@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"fmt"
 	"io/ioutil"
 	"loyalty/internal/api/cookie"
 	"loyalty/internal/model"
@@ -50,7 +49,6 @@ func (h Handler) ordersPost(w http.ResponseWriter, r *http.Request) {
 	}
 	order := model.Order{Number: numberFromBody, UserLogin: userKey, Status: "NEW"}
 	dublicateOrder, anotherUserOrder, err := h.Storage.InsertOrderSimple(ctx, &order)
-	fmt.Println(dublicateOrder, anotherUserOrder, err)
 	switch {
 	case err != nil: // внутренняя ошибка сервера
 		w.WriteHeader(http.StatusInternalServerError)

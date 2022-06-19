@@ -2,7 +2,6 @@ package repo
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"loyalty/internal/model"
 )
@@ -26,18 +25,11 @@ func (s *postgresStorage) InsertOrderSimple(ctx context.Context, o *model.Order)
 	return false, false, nil
 }
 
-func (s postgresStorage) UpdateOrder(ctx context.Context, o *model.Order) (err error) {
-	_, err = s.DB.ExecContext(ctx, "UPDATE Orders"+
-		"SET Status = @Status, Accrual = @Accrual, "+
-		"Withdrawn = @Withdrawn "+
-		"ProcessedTime = @ProcessedTime "+
-		"WHERE Number = @Number",
-		sql.Named("Number", o.Number),
-		sql.Named("Status", o.Status),
-		sql.Named("Accrual", o.AccrualBalls),
-		sql.Named("Withdrawn", o.WithdrawnBalls),
-		sql.Named("ProcessedTime", o.ProcessedTime),
-	)
+func (s postgresStorage) UpdateOrder(ctx context.Context, o *model.ExtOrder) (err error) {
+
+	fmt.Println("Обновляет заказ: ", o.Number, " со статусом ", o.Status)
+	_, err = s.DB.ExecContext(ctx, "UPDATE Orders SET Status = $1, Accrual = $2, Withdrawn = $3, ProcessedTime = $4 WHERE Number = $5",
+		o.Status, o.AccrualBalls, o.WithdrawnBalls, o.ProcessedTime, o.Number)
 	if err != nil {
 		fmt.Println("Ошибка c запросом : ", err)
 		return err
@@ -97,4 +89,30 @@ func (s *postgresStorage) InsertOrder(ctx context.Context, user *model.User, ord
 
 	return false, 0, nil
 
+}
+
+//Получение заказов для обработки во внешней системе
+func (s *postgresStorage) SelectProcessingOrders() (*[]model.Order, error) {
+	ctx := context.TODO()
+	rows, err := s.DB.QueryContext(ctx, "SELECT Number, UserLogin, Status, Accrual, UploadedTime FROM Orders WHERE Status NOT IN ('INVALID','PROCESSED')")
+	if err != nil {
+		return nil, err
+	}
+
+	if rows.Err() != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+	orders := make([]model.Order, 0, 1)
+	for rows.Next() {
+		var order model.Order
+		err = rows.Scan(&order.Number, &order.UserLogin, &order.Status, &order.AccrualBalls, &order.UploadedTime)
+		if err != nil {
+			return nil, err
+		}
+
+		orders = append(orders, order)
+	}
+	return &orders, nil
 }

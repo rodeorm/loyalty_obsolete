@@ -21,6 +21,16 @@ type Order struct {
 	ProcessedTime  time.Time `json:"-"`
 }
 
+//Заказ во внешней системе
+type ExtOrder struct {
+	UserLogin      string    `json:"-"`
+	Number         string    `json:"order,omitempty"`
+	Status         string    `json:"status,omitempty"`
+	AccrualBalls   int       `json:"accrual,omitempty"` //Рассчитанные баллы за заказ
+	WithdrawnBalls int       `json:"-"`                 //Сумма баллов к списанию в счёт оплаты заказа
+	ProcessedTime  time.Time `json:"-"`
+}
+
 //Баланс
 type Balance struct {
 	Current   int `json:"current,omitempty"`
@@ -29,11 +39,11 @@ type Balance struct {
 
 //Операция над баллами лояльности
 type Operation struct {
-	OrderNumber string
-	Sum         int
+	OrderNumber   string    `json:"order,omitempty"`
+	Sum           int       `json:"sum,omitempty"`
+	ProcessedTime time.Time `json:"processed_at"`
+	UserLogin     string    `json:"-"`
 }
-
-//Заказ пользователя
 
 /*
 

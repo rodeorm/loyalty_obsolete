@@ -13,10 +13,12 @@ type Storage interface {
 
 	InsertOrderSimple(ctx context.Context, o *model.Order) (dublicateOrder, anotherUserOrder bool, err error)
 	InsertOrder(ctx context.Context, user *model.User, order *model.Order) (dublicateOrder bool, shortage int, err error)
-	UpdateOrder(ctx context.Context, o *model.Order) (err error)
+	UpdateOrder(ctx context.Context, o *model.ExtOrder) (err error)
 	SelectOrders(ctx context.Context, u *model.User) (*[]model.Order, error)
+	SelectProcessingOrders() (*[]model.Order, error)
 
 	InsertOperation(ctx context.Context, o *model.Operation) (err error)
+	SelectOperations(ctx context.Context, u *model.User) (*[]model.Operation, error)
 }
 
 // NewStorage определяет место для хранения данных

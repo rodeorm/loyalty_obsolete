@@ -1,6 +1,13 @@
 package api
 
-import "net/http"
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"loyalty/internal/api/cookie"
+	"loyalty/internal/model"
+	"net/http"
+)
 
 /*
 Получение информации о выводе средств
@@ -34,7 +41,29 @@ func (h Handler) balanceWithdrawalsGet(w http.ResponseWriter, r *http.Request) {
 		401 — пользователь не авторизован.
 		500 — внутренняя ошибка сервера.
 	*/
-	
+	ctx := context.TODO()
+	userKey, err := cookie.GetUserKeyFromCoockie(r)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	user := model.User{Login: userKey}
+	fmt.Println(user)
+	operationHistory, err := h.Storage.SelectOperations(ctx, &user)
 
+	if err != nil {
+		fmt.Println("Проблемы с получением истории списаний", err)
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+
+	bodyBytes, err := json.Marshal(operationHistory)
+	if err != nil {
+		fmt.Println("Проблемы при маршалинге истории списаний", err)
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	fmt.Fprint(w, string(bodyBytes))
 
 }

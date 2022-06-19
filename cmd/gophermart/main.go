@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"loyalty/internal/api"
+	"loyalty/internal/client"
 	"loyalty/internal/repo"
 )
 
@@ -23,7 +24,7 @@ func main() {
 		fmt.Println("Ошибка при инициализации БД")
 		return
 	}
-
-	api.StartAPI(db, runAddress, accrualSystemAddress)
+	go client.StartClient(db, accrualSystemAddress)
+	api.StartAPI(db, runAddress)
 
 }
