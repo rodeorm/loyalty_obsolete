@@ -34,4 +34,7 @@ func (h Handler) balanceWithdrawalsGet(w http.ResponseWriter, r *http.Request) {
 		401 — пользователь не авторизован.
 		500 — внутренняя ошибка сервера.
 	*/
+	
+
+
 }

@@ -1,6 +1,13 @@
 package api
 
-import "net/http"
+import (
+	"context"
+	"fmt"
+	"io/ioutil"
+	"loyalty/internal/api/cookie"
+	"loyalty/internal/model"
+	"net/http"
+)
 
 /*
   	Загрузка номера заказа
@@ -25,4 +32,35 @@ func (h Handler) ordersPost(w http.ResponseWriter, r *http.Request) {
 	   422 — неверный формат номера заказа;
 	   500 — внутренняя ошибка сервера.
 	*/
+	userKey, err := cookie.GetUserKeyFromCoockie(r)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	ctx := context.TODO()
+	if r.ContentLength == 0 {
+		w.WriteHeader(http.StatusBadRequest) //неверный формат запроса
+		return
+	}
+	bodyBytes, _ := ioutil.ReadAll(r.Body)
+	numberFromBody := string(bodyBytes)
+	if !model.CheckOrderNum(numberFromBody) {
+		w.WriteHeader(http.StatusUnprocessableEntity) // неверный формат номера заказа
+		return
+	}
+	order := model.Order{Number: numberFromBody, UserLogin: userKey, Status: "NEW"}
+	dublicateOrder, anotherUserOrder, err := h.Storage.InsertOrderSimple(ctx, &order)
+	fmt.Println(dublicateOrder, anotherUserOrder, err)
+	switch {
+	case err != nil: // внутренняя ошибка сервера
+		w.WriteHeader(http.StatusInternalServerError)
+	case anotherUserOrder: // номер заказа уже был загружен другим пользователем
+		w.WriteHeader(http.StatusConflict)
+	case dublicateOrder: // номер заказа уже был загружен этим пользователем
+		w.WriteHeader(http.StatusOK)
+	default:
+		w.WriteHeader(http.StatusAccepted) //новый номер заказа принят в обработку
+		return
+	}
+
 }

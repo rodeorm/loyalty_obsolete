@@ -2,23 +2,22 @@ package repo
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
 //CheckPassword проверяет пароль
-func (s postgresStorage) CheckPassword(ctx context.Context, login int, password string) (bool, error) {
+func (s postgresStorage) CheckPassword(ctx context.Context, login, password string) (bool, error) {
 	var passwordDB string
-	err := s.DB.QueryRowContext(ctx, "SELECT Password FROM Users WHERE Login = @login; ", sql.Named("login", login)).Scan(passwordDB)
+	err := s.DB.QueryRowContext(ctx, "SELECT Password FROM Users WHERE Login = $1; ", login).Scan(&passwordDB)
 	if err != nil {
 		fmt.Println("Ошибка c запросом: ", err)
-		return false, err
+		return false, nil
 	}
 
 	if CheckPasswordHash(password, passwordDB) {
-		fmt.Printf("Успешная аутентификация пользователя %d", login)
+		fmt.Printf("Успешная аутентификация пользователя %s", login)
 		return true, nil
 	}
 	return false, nil

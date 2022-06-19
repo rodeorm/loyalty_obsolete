@@ -13,18 +13,6 @@ func (s postgresStorage) createTables(ctx context.Context) error {
 		return err
 	}
 
-	err = s.createOperationTypesTable(ctx)
-	if err != nil {
-		fmt.Println("Проблема при создании таблицы с Типами операции")
-		return err
-	}
-
-	err = s.createOrderStatusesTable(ctx)
-	if err != nil {
-		fmt.Println("Проблема при создании таблицы со Статусами заказа")
-		return err
-	}
-
 	err = s.createUsersTable(ctx)
 	if err != nil {
 		fmt.Println("Проблема при создании таблицы с Пользователями")
@@ -42,7 +30,19 @@ func (s postgresStorage) createTables(ctx context.Context) error {
 		fmt.Println("Проблема при создании таблицы с Операциями")
 		return err
 	}
+	/*
+		err = s.createOperationTypesTable(ctx)
+		if err != nil {
+			fmt.Println("Проблема при создании таблицы с Типами операции")
+			return err
+		}
 
+		err = s.createOrderStatusesTable(ctx)
+		if err != nil {
+			fmt.Println("Проблема при создании таблицы со Статусами заказа")
+			return err
+		}
+	*/
 	return nil
 }
 
@@ -55,6 +55,57 @@ func (s postgresStorage) dropTables(ctx context.Context) error {
 	return nil
 }
 
+func (s postgresStorage) createUsersTable(ctx context.Context) error {
+	_, err := s.DB.ExecContext(ctx,
+		"CREATE TABLE IF NOT EXISTS  Users"+
+			"("+
+			"login VARCHAR(20) PRIMARY KEY"+
+			", password VARCHAR(100) NOT NULL"+
+			", balance int"+
+			");")
+	if err != nil {
+		fmt.Println("Проблема при создании таблицы с Пользователями: ", err)
+		return err
+	}
+	return nil
+}
+
+func (s postgresStorage) createOrdersTable(ctx context.Context) error {
+	_, err := s.DB.ExecContext(ctx,
+		"CREATE TABLE IF NOT EXISTS Orders"+
+			"("+
+			"Number VARCHAR(20) PRIMARY KEY "+
+			", Status VARCHAR(60) "+
+			", UserLogin VARCHAR(20) REFERENCES Users(login) "+
+			", Accrual INT "+
+			", Withdrawn INT "+
+			", UploadedTime TIMESTAMP "+
+			", ProcessedTime TIMESTAMP "+
+			");")
+	if err != nil {
+		fmt.Println("Проблема при создании таблицы с Заказами: ", err)
+		return err
+	}
+	return nil
+}
+
+func (s postgresStorage) createOperationsTable(ctx context.Context) error {
+	_, err := s.DB.ExecContext(ctx,
+		"CREATE TABLE IF NOT EXISTS Operations"+
+			"("+
+			"ID SERIAL PRIMARY KEY"+
+			", OrderNumber VARCHAR(20) REFERENCES Orders(Number)"+
+			", Sum INT"+
+			", ProcessedTime TIMESTAMP "+
+			")")
+	if err != nil {
+		fmt.Println("Проблема при создании таблицы с Операциями: ", err)
+		return err
+	}
+	return nil
+}
+
+/*
 func (s postgresStorage) createOperationTypesTable(ctx context.Context) error {
 	_, err := s.DB.ExecContext(ctx,
 		"CREATE TABLE IF NOT EXISTS  OperationTypes"+
@@ -105,50 +156,4 @@ func (s postgresStorage) createOrderStatusesTable(ctx context.Context) error {
 	}
 	return nil
 }
-
-func (s postgresStorage) createUsersTable(ctx context.Context) error {
-	_, err := s.DB.ExecContext(ctx,
-		"CREATE TABLE IF NOT EXISTS  Users"+
-			"("+
-			"login INT PRIMARY KEY"+
-			", password VARCHAR(10) NOT NULL"+
-			", balance int"+
-			");")
-	if err != nil {
-		fmt.Println("Проблема при создании таблицы с Пользователями: ", err)
-		return err
-	}
-	return nil
-}
-
-func (s postgresStorage) createOrdersTable(ctx context.Context) error {
-	_, err := s.DB.ExecContext(ctx,
-		"CREATE TABLE IF NOT EXISTS Orders"+
-			"("+
-			"ID INT PRIMARY KEY "+
-			", OrderStatusID INT REFERENCES OrderStatuses(ID) "+
-			", UserLogin INT REFERENCES Users(login) "+
-			", Accrual INT "+
-			");")
-	if err != nil {
-		fmt.Println("Проблема при создании таблицы с Заказами: ", err)
-		return err
-	}
-	return nil
-}
-
-func (s postgresStorage) createOperationsTable(ctx context.Context) error {
-	_, err := s.DB.ExecContext(ctx,
-		"CREATE TABLE IF NOT EXISTS Operations"+
-			"("+
-			"ID SERIAL PRIMARY KEY"+
-			", OrderID INT REFERENCES Orders(ID)"+
-			", OperationTypeID INT  REFERENCES OperationTypes(ID)"+
-			", Sum INT"+
-			")")
-	if err != nil {
-		fmt.Println("Проблема при создании таблицы с Операциями: ", err)
-		return err
-	}
-	return nil
-}
+*/

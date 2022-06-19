@@ -1,6 +1,13 @@
 package api
 
-import "net/http"
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"loyalty/internal/api/cookie"
+	"loyalty/internal/model"
+	"net/http"
+)
 
 /*
 Получение списка загруженных номеров заказов
@@ -48,4 +55,27 @@ func (h Handler) ordersGet(w http.ResponseWriter, r *http.Request) {
 	   401 — пользователь не авторизован.
 	   500 — внутренняя ошибка сервера.
 	*/
+	ctx := context.TODO()
+	userKey, err := cookie.GetUserKeyFromCoockie(r)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	user := model.User{Login: userKey}
+
+	orderHistory, err := h.Storage.SelectOrders(ctx, &user)
+	if err != nil {
+		fmt.Println("Проблемы с получением истории заказов", err)
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+
+	bodyBytes, err := json.Marshal(orderHistory)
+	if err != nil {
+		fmt.Println("Проблемы при маршалинге истории заказов", err)
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	fmt.Fprint(w, string(bodyBytes))
 }

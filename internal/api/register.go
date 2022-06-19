@@ -1,6 +1,11 @@
 package api
 
 import (
+	"context"
+	"encoding/json"
+	"io/ioutil"
+	"loyalty/internal/api/cookie"
+	"loyalty/internal/model"
 	"net/http"
 )
 
@@ -25,4 +30,25 @@ func (h Handler) registerPost(w http.ResponseWriter, r *http.Request) {
 		409 — логин уже занят;
 		500 — внутренняя ошибка сервера.
 	*/
+	user := model.User{}
+	bodyBytes, _ := ioutil.ReadAll(r.Body)
+	err := json.Unmarshal(bodyBytes, &user)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	ctx := context.TODO()
+	isDuplicated, err := h.Storage.InsertUser(ctx, &user)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if isDuplicated {
+		w.WriteHeader(http.StatusConflict)
+		return
+	}
+	http.SetCookie(w, cookie.PutUserKeyToCookie(user.Login))
+	w.WriteHeader(http.StatusOK)
 }

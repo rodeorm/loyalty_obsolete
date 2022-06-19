@@ -1,6 +1,13 @@
 package api
 
-import "net/http"
+import (
+	"context"
+	"encoding/json"
+	"io/ioutil"
+	"loyalty/internal/api/cookie"
+	"loyalty/internal/model"
+	"net/http"
+)
 
 /*
 Хендлер: POST /api/user/login.
@@ -23,4 +30,25 @@ func (h Handler) loginPost(w http.ResponseWriter, r *http.Request) {
 		401 — неверная пара логин/пароль;
 		500 — внутренняя ошибка сервера.
 	*/
+	user := model.User{}
+	bodyBytes, _ := ioutil.ReadAll(r.Body)
+	err := json.Unmarshal(bodyBytes, &user)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	ctx := context.TODO()
+	auth, err := h.Storage.AuthUser(ctx, &user)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if auth {
+		http.SetCookie(w, cookie.PutUserKeyToCookie(user.Login))
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+	w.WriteHeader(http.StatusUnauthorized)
 }

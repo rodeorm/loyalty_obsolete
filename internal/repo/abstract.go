@@ -1,8 +1,22 @@
 package repo
 
-import "log"
+import (
+	"context"
+	"log"
+	"loyalty/internal/model"
+)
 
 type Storage interface {
+	InsertUser(ctx context.Context, u *model.User) (dublicate bool, err error)
+	AuthUser(ctx context.Context, u *model.User) (success bool, err error)
+	SelectUserData(ctx context.Context, u *model.User) error
+
+	InsertOrderSimple(ctx context.Context, o *model.Order) (dublicateOrder, anotherUserOrder bool, err error)
+	InsertOrder(ctx context.Context, user *model.User, order *model.Order) (dublicateOrder bool, shortage int, err error)
+	UpdateOrder(ctx context.Context, o *model.Order) (err error)
+	SelectOrders(ctx context.Context, u *model.User) (*[]model.Order, error)
+
+	InsertOperation(ctx context.Context, o *model.Operation) (err error)
 }
 
 // NewStorage определяет место для хранения данных
