@@ -39,15 +39,25 @@ func (s *postgresStorage) AuthUser(ctx context.Context, u *model.User) (success 
 
 //SelectUserData актуализирует для Пользователя данные о текущей сумме баллов лояльности, а также сумме использованных за весь период регистрации баллов
 func (s *postgresStorage) SelectUserData(ctx context.Context, u *model.User) error {
-	query := "SELECT COALESCE(SUM(Accrual),0)  - COALESCE(SUM(op.Sum),0) AS Balance, COALESCE(SUM(op.Sum),0) AS Withdrawn" +
-		" FROM Users AS u LEFT JOIN Orders AS o ON o.userlogin = u.login AND o.Status = 'PROCESSED' " +
+	queryAccrual := "SELECT COALESCE(SUM(Accrual),0)" +
+		" FROM Users AS u " +
+		" LEFT JOIN Orders AS o ON o.userlogin = u.login AND o.Status = 'PROCESSED' " +
+		" WHERE u.login = $1"
+	queryWithdraw := "SELECT COALESCE(SUM(op.Sum),0) AS Withdrawn" +
+		" FROM Users AS u " +
 		" LEFT JOIN Operations AS op ON op.userLogin = u.login " +
 		" WHERE u.login = $1"
 	err := s.DB.QueryRowContext(ctx,
-		query, u.Login).Scan(&u.Balance, &u.Withdrawn)
+		queryAccrual, u.Login).Scan(&u.Balance)
 	if err != nil {
 		return err
 	}
+	err = s.DB.QueryRowContext(ctx,
+		queryWithdraw, u.Login).Scan(&u.Withdrawn)
+	if err != nil {
+		return err
+	}
+	u.Balance = u.Balance - u.Withdrawn
 	fmt.Println("Обновили данные по пользователю: ", u.Login, "Баланс: ", u.Balance, ". Списания: ", u.Withdrawn)
 	return nil
 }
