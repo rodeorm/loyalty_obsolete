@@ -48,6 +48,6 @@ func makeGetRequest(storage repo.Storage, accrualSystemAddress string) {
 			ctx := context.TODO()
 			storage.UpdateOrder(ctx, &order)
 		}
-		time.Sleep(50 * time.Millisecond)
+		time.Sleep(5 * time.Millisecond)
 	}
 }
