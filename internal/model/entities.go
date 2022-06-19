@@ -6,8 +6,8 @@ import "time"
 type User struct {
 	Login     string `json:"login,omitempty"`
 	Password  string `json:"password,omitempty"`
-	Balance   int
-	Withdrawn int
+	Balance   float64
+	Withdrawn float64
 }
 
 //Заказ
@@ -15,8 +15,8 @@ type Order struct {
 	UserLogin      string    `json:"-"`
 	Number         string    `json:"number,omitempty"`
 	Status         string    `json:"status,omitempty"`
-	AccrualBalls   int       `json:"accrual,omitempty"` //Рассчитанные баллы за заказ
-	WithdrawnBalls int       `json:"-"`                 //Сумма баллов к списанию в счёт оплаты заказа
+	AccrualBalls   float64   `json:"accrual,omitempty"` //Рассчитанные баллы за заказ
+	WithdrawnBalls float64   `json:"-"`                 //Сумма баллов к списанию в счёт оплаты заказа
 	UploadedTime   time.Time `json:"uploaded_at,omitempty"`
 	ProcessedTime  time.Time `json:"-"`
 }
@@ -26,21 +26,21 @@ type ExtOrder struct {
 	UserLogin      string    `json:"-"`
 	Number         string    `json:"order,omitempty"`
 	Status         string    `json:"status,omitempty"`
-	AccrualBalls   int       `json:"accrual,omitempty"` //Рассчитанные баллы за заказ
-	WithdrawnBalls int       `json:"-"`                 //Сумма баллов к списанию в счёт оплаты заказа
+	AccrualBalls   float64   `json:"accrual,omitempty"` //Рассчитанные баллы за заказ
+	WithdrawnBalls float64   `json:"-"`                 //Сумма баллов к списанию в счёт оплаты заказа
 	ProcessedTime  time.Time `json:"-"`
 }
 
 //Баланс
 type Balance struct {
-	Current   int `json:"current,omitempty"`
-	Withdrawn int `json:"withdrawn,omitempty"`
+	Current   float64 `json:"current,omitempty"`
+	Withdrawn float64 `json:"withdrawn,omitempty"`
 }
 
 //Операция над баллами лояльности
 type Operation struct {
 	OrderNumber   string    `json:"order,omitempty"`
-	Sum           int       `json:"sum,omitempty"`
+	Sum           float64   `json:"sum,omitempty"`
 	ProcessedTime time.Time `json:"processed_at"`
 	UserLogin     string    `json:"-"`
 }
