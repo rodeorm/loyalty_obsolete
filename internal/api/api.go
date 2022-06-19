@@ -29,10 +29,12 @@ func StartAPI(storage repo.Storage, runAddress string) error {
 	// Те, кто НЕ попадают под middleware проверку аутентификации
 	router := mux.NewRouter()
 	router.Use(middleware.GzipMiddleware)
+	router.Use(middleware.LoggingMiddleware)
 	// Те, кто попадают под middleware проверку аутентификации
 	api := router.PathPrefix("/").Subrouter()
 	api.Use(middleware.AuthMiddleware)
 	api.Use(middleware.GzipMiddleware)
+	api.Use(middleware.LoggingMiddleware)
 
 	// Регистрация пользователя
 	router.HandleFunc("/api/user/register", h.registerPost).Methods(http.MethodPost)

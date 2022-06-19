@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-var session string = "token"
+var session string = "Authorisation"
 
 //По хорошему надо делать sessionStore и хранить в куках зашифрованный указатель на сессию, но не успеваю сделать так
 func GetUserKeyFromCoockie(r *http.Request) (string, error) {
