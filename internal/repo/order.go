@@ -64,7 +64,7 @@ func (s *postgresStorage) SelectOrders(ctx context.Context, u *model.User) (*[]m
 }
 
 //InsertOrder вставляет новый запрос на списание средств
-func (s *postgresStorage) InsertOrder(ctx context.Context, user *model.User, order *model.Order) (dublicateOrder bool, shortage int, err error) {
+func (s *postgresStorage) InsertOrder(ctx context.Context, user *model.User, order *model.Order) (dublicateOrder bool, shortage float64, err error) {
 	// Актуализируем данные баланса пользователя
 	s.SelectUserData(ctx, user)
 

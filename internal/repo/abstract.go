@@ -12,7 +12,7 @@ type Storage interface {
 	SelectUserData(ctx context.Context, u *model.User) error
 
 	InsertOrderSimple(ctx context.Context, o *model.Order) (dublicateOrder, anotherUserOrder bool, err error)
-	InsertOrder(ctx context.Context, user *model.User, order *model.Order) (dublicateOrder bool, shortage int, err error)
+	InsertOrder(ctx context.Context, user *model.User, order *model.Order) (dublicateOrder bool, shortage float64, err error)
 	UpdateOrder(ctx context.Context, o *model.ExtOrder) (err error)
 	SelectOrders(ctx context.Context, u *model.User) (*[]model.Order, error)
 	SelectProcessingOrders() (*[]model.Order, error)
