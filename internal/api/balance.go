@@ -29,7 +29,7 @@ func (h Handler) balanceGet(w http.ResponseWriter, r *http.Request) {
 	user := model.User{Login: userKey}
 	h.Storage.SelectUserData(ctx, &user)
 	balance := model.Balance{Current: user.Balance, Withdrawn: user.Withdrawn}
-	//	fmt.Println("Баланс равен:", balance)
+	fmt.Println("Баланс равен:", balance)
 	bodyBytes, err := json.Marshal(balance)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

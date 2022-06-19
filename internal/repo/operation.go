@@ -14,6 +14,7 @@ func (s *postgresStorage) InsertOperation(ctx context.Context, o *model.Operatio
 		fmt.Println("Ошибка c запросом : ", err)
 		return err
 	}
+	
 	return nil
 }
 
