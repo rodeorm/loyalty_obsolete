@@ -40,7 +40,7 @@ func (s *postgresStorage) AuthUser(ctx context.Context, u *model.User) (success 
 //SelectUserData актуализирует для Пользователя данные о текущей сумме баллов лояльности, а также сумме использованных за весь период регистрации баллов
 func (s *postgresStorage) SelectUserData(ctx context.Context, u *model.User) error {
 	query := "SELECT COALESCE(SUM(Accrual),0)  - COALESCE(SUM(op.Sum),0) AS Balance, COALESCE(SUM(op.Sum),0) AS Withdrawn" +
-		" FROM Users AS u LEFT JOIN Orders AS o ON o.userlogin = u.login " +
+		" FROM Users AS u LEFT JOIN Orders AS o ON o.userlogin = u.login AND o.Status = 'PROCESSED' " +
 		" LEFT JOIN Operations AS op ON op.userLogin = u.login " +
 		" WHERE u.login = $1"
 	err := s.DB.QueryRowContext(ctx,
