@@ -33,8 +33,8 @@ type ExtOrder struct {
 
 //Баланс
 type Balance struct {
-	Current   float64 `json:"current"`
-	Withdrawn float64 `json:"withdrawn"`
+	Current   float64 `json:"Current"`
+	Withdrawn float64 `json:"Withdrawn"`
 }
 
 //Операция над баллами лояльности
