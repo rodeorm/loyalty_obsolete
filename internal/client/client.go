@@ -18,11 +18,18 @@ func StartClient(storage repo.Storage, accrualSystemAddress string) {
 
 func makeGetRequest(storage repo.Storage, accrualSystemAddress string) {
 	for {
-		orders, _ := storage.SelectProcessingOrders()
+		orders, err := storage.SelectProcessingOrders()
+		if err != nil {
+			fmt.Println("Ошибка при получении заказов на обновление статуса", err)
+			break
+		}
 		for _, order := range *orders {
-			fmt.Println("Попытка обновить", order.Number)
 			url := fmt.Sprintf(accrualSystemAddress + "/api/orders/" + order.Number)
 			r, _ := http.Get(url)
+			if r.StatusCode != 200 {
+				break
+			}
+
 			order := model.ExtOrder{}
 
 			bodyBytes, err := ioutil.ReadAll(r.Body)

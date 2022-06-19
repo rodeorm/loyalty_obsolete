@@ -61,7 +61,7 @@ func (s postgresStorage) createUsersTable(ctx context.Context) error {
 			"("+
 			"login VARCHAR(20) PRIMARY KEY"+
 			", password VARCHAR(100) NOT NULL"+
-			", balance MONEY"+
+			", balance NUMERIC"+
 			");")
 	if err != nil {
 		fmt.Println("Проблема при создании таблицы с Пользователями: ", err)
@@ -77,8 +77,8 @@ func (s postgresStorage) createOrdersTable(ctx context.Context) error {
 			"Number VARCHAR(20) PRIMARY KEY "+
 			", Status VARCHAR(60) "+
 			", UserLogin VARCHAR(20) REFERENCES Users(login) "+
-			", Accrual MONEY "+
-			", Withdrawn MONEY "+
+			", Accrual NUMERIC "+
+			", Withdrawn NUMERIC "+
 			", UploadedTime TIMESTAMP "+
 			", ProcessedTime TIMESTAMP "+
 			");")
@@ -95,7 +95,7 @@ func (s postgresStorage) createOperationsTable(ctx context.Context) error {
 			"("+
 			"ID SERIAL PRIMARY KEY"+
 			", OrderNumber VARCHAR(20)"+
-			", Sum MONEY"+
+			", Sum NUMERIC"+
 			", ProcessedTime TIMESTAMP "+
 			", UserLogin VARCHAR(20) REFERENCES Users(login)"+
 			")")
