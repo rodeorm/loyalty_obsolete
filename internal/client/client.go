@@ -26,6 +26,7 @@ func makeGetRequest(storage repo.Storage, accrualSystemAddress string) {
 			order := model.ExtOrder{}
 
 			bodyBytes, err := ioutil.ReadAll(r.Body)
+			defer r.Body.Close()
 			if err != nil {
 				log.Println(err)
 				break

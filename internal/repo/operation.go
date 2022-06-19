@@ -24,6 +24,9 @@ func (s *postgresStorage) SelectOperations(ctx context.Context, u *model.User) (
 	if err != nil {
 		return nil, err
 	}
+	if rows.Err() != nil {
+		return nil, err
+	}
 	defer rows.Close()
 	operations := make([]model.Operation, 0, 1)
 	for rows.Next() {
