@@ -13,6 +13,7 @@ import (
 */
 func config() (string, string, string) {
 	flag.Parse()
+
 	/*
 		os.Setenv("RUN_ADDRESS", "localhost:8020")
 		os.Setenv("DATABASE_URI", "postgres://app:qqqQQQ123@localhost:5432/loyalty?sslmode=disable")
