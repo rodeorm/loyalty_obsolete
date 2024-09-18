@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"loyalty/internal/logger"
 	"os"
 )
 
@@ -13,12 +14,11 @@ import (
 */
 func config() (string, string, string) {
 	flag.Parse()
-	/*
-		os.Setenv("RUN_ADDRESS", "localhost:8020")
-		os.Setenv("DATABASE_URI", "postgres://app:qqqQQQ123@localhost:5432/loyalty?sslmode=disable")
-		os.Setenv("ACCRUAL_SYSTEM_ADDRESS", "http://localhost:8080")
 
-	*/
+	os.Setenv("RUN_ADDRESS", "localhost:8020")
+	os.Setenv("DATABASE_URI", "postgres://app:qqqQQQ123@localhost:5433/loyalty?sslmode=disable")
+	os.Setenv("ACCRUAL_SYSTEM_ADDRESS", "http://localhost:8080")
+
 	var runAddress, databaseURI, accrualSystemAddress string
 
 	//Адрес и порт запуска сервиса
@@ -36,6 +36,7 @@ func config() (string, string, string) {
 	if accrualSystemAddress == "" {
 		accrualSystemAddress = os.Getenv("ACCRUAL_SYSTEM_ADDRESS")
 	}
+	logger.Initialize("info")
 
 	return databaseURI, runAddress, accrualSystemAddress
 }

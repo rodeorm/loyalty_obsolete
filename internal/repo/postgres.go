@@ -2,18 +2,18 @@ package repo
 
 import (
 	"context"
-	"database/sql"
 
-	_ "github.com/lib/pq"
+	_ "github.com/jackc/pgx/v5/stdlib"
+	"github.com/jmoiron/sqlx"
 )
 
 type postgresStorage struct {
-	DB *sql.DB // Драйвер подключения к СУБД
+	DB *sqlx.DB // Драйвер подключения к СУБД
 }
 
-//InitPostgres cоздает хранилище данных в БД на экземпляре Postgres
+// InitPostgres cоздает хранилище данных в БД на экземпляре Postgres
 func InitPostgres(connectionString string) (*postgresStorage, error) {
-	db, err := sql.Open("postgres", connectionString)
+	db, err := sqlx.Open("pgx", connectionString)
 	if err != nil {
 		return nil, err
 	}

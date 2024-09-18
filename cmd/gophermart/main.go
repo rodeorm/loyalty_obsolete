@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"loyalty/internal/api"
 	"loyalty/internal/client"
 	"loyalty/internal/repo"
@@ -21,7 +21,7 @@ func main() {
 	databaseURI, runAddress, accrualSystemAddress := config()
 	db, err := repo.InitPostgres(databaseURI)
 	if err != nil {
-		fmt.Println("Ошибка при инициализации БД")
+		log.Fatal("ошибка при инициализации БД: ", err)
 		return
 	}
 	go client.StartClient(db, accrualSystemAddress)
