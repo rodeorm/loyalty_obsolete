@@ -18,11 +18,11 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"loyalty/internal/api/middleware"
-	"loyalty/internal/repo"
+	"github.com/rodeorm/loyalty/internal/api/middleware"
+	"github.com/rodeorm/loyalty/internal/repo"
 )
 
-//RouterStart запускает веб-сервер
+// RouterStart запускает веб-сервер
 func StartAPI(storage repo.Storage, runAddress string) error {
 	h := Handler{Storage: storage}
 

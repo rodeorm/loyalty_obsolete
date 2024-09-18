@@ -3,8 +3,9 @@ package repo
 import (
 	"context"
 	"fmt"
-	"loyalty/internal/model"
 	"sort"
+
+	"github.com/rodeorm/loyalty/internal/model"
 )
 
 func (s *postgresStorage) InsertOperation(ctx context.Context, o *model.Operation) (err error) {
@@ -14,11 +15,11 @@ func (s *postgresStorage) InsertOperation(ctx context.Context, o *model.Operatio
 		fmt.Println("Ошибка c запросом : ", err)
 		return err
 	}
-	
+
 	return nil
 }
 
-//Получение для пользователя списка загруженных номеров заказов
+// Получение для пользователя списка загруженных номеров заказов
 func (s *postgresStorage) SelectOperations(ctx context.Context, u *model.User) (*[]model.Operation, error) {
 
 	rows, err := s.DB.QueryContext(ctx, "SELECT OrderNumber, Sum, ProcessedTime FROM Operations WHERE UserLogin = $1", u.Login)

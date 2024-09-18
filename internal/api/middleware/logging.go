@@ -1,9 +1,10 @@
 package middleware
 
 import (
-	"loyalty/internal/logger"
 	"net/http"
 	"time"
+
+	"github.com/rodeorm/loyalty/internal/logger"
 
 	"go.uber.org/zap"
 )

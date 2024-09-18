@@ -2,17 +2,18 @@ package api
 
 import (
 	"context"
-	"io/ioutil"
-	"loyalty/internal/api/cookie"
-	"loyalty/internal/model"
+	"io"
 	"net/http"
+
+	"github.com/rodeorm/loyalty/internal/api/cookie"
+	"github.com/rodeorm/loyalty/internal/model"
 )
 
 /*
-  	Загрузка номера заказа
-	Хендлер: POST /api/user/orders.
-	Хендлер доступен только аутентифицированным пользователям. Номером заказа является последовательность цифр произвольной длины.
-	Номер заказа может быть проверен на корректность ввода с помощью алгоритма Луна.
+	  	Загрузка номера заказа
+		Хендлер: POST /api/user/orders.
+		Хендлер доступен только аутентифицированным пользователям. Номером заказа является последовательность цифр произвольной длины.
+		Номер заказа может быть проверен на корректность ввода с помощью алгоритма Луна.
 */
 func (h Handler) ordersPost(w http.ResponseWriter, r *http.Request) {
 	/*
@@ -41,7 +42,7 @@ func (h Handler) ordersPost(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest) //неверный формат запроса
 		return
 	}
-	bodyBytes, _ := ioutil.ReadAll(r.Body)
+	bodyBytes, _ := io.ReadAll(r.Body)
 	numberFromBody := string(bodyBytes)
 	if !model.CheckOrderNum(numberFromBody) {
 		w.WriteHeader(http.StatusUnprocessableEntity) // неверный формат номера заказа

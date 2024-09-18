@@ -3,10 +3,11 @@ package repo
 import (
 	"context"
 	"fmt"
-	"loyalty/internal/model"
+
+	"github.com/rodeorm/loyalty/internal/model"
 )
 
-//InsertUser создает нового Пользователя
+// InsertUser создает нового Пользователя
 func (s *postgresStorage) InsertUser(ctx context.Context, u *model.User) (dublicate bool, err error) {
 	var login string
 	// Проверяем, что пользователя с таким логином нет в БД
@@ -25,7 +26,7 @@ func (s *postgresStorage) InsertUser(ctx context.Context, u *model.User) (dublic
 	return false, nil
 }
 
-//AuthUser аутентифицирует Пользователя
+// AuthUser аутентифицирует Пользователя
 func (s *postgresStorage) AuthUser(ctx context.Context, u *model.User) (success bool, err error) {
 	success, err = s.CheckPassword(ctx, u.Login, u.Password)
 	if success && err == nil {
@@ -37,7 +38,7 @@ func (s *postgresStorage) AuthUser(ctx context.Context, u *model.User) (success 
 	return false, nil
 }
 
-//SelectUserData актуализирует для Пользователя данные о текущей сумме баллов лояльности, а также сумме использованных за весь период регистрации баллов
+// SelectUserData актуализирует для Пользователя данные о текущей сумме баллов лояльности, а также сумме использованных за весь период регистрации баллов
 func (s *postgresStorage) SelectUserData(ctx context.Context, u *model.User) error {
 	queryAccrual := "SELECT COALESCE(SUM(Accrual),0)" +
 		" FROM Users AS u " +

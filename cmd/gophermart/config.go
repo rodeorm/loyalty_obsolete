@@ -2,8 +2,9 @@ package main
 
 import (
 	"flag"
-	"loyalty/internal/logger"
 	"os"
+
+	"github.com/rodeorm/loyalty/internal/logger"
 )
 
 /*

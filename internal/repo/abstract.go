@@ -3,7 +3,8 @@ package repo
 import (
 	"context"
 	"log"
-	"loyalty/internal/model"
+
+	"github.com/rodeorm/loyalty/internal/model"
 )
 
 type Storage interface {
@@ -23,7 +24,6 @@ type Storage interface {
 
 // NewStorage определяет место для хранения данных
 func NewStorage(connectionString string) Storage {
-	var storage Storage
 	storage, err := InitPostgres(connectionString)
 	if err != nil {
 		log.Fatal(err)

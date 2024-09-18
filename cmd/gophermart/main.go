@@ -2,9 +2,10 @@ package main
 
 import (
 	"log"
-	"loyalty/internal/api"
-	"loyalty/internal/client"
-	"loyalty/internal/repo"
+
+	"github.com/rodeorm/loyalty/internal/api"
+	"github.com/rodeorm/loyalty/internal/client"
+	"github.com/rodeorm/loyalty/internal/repo"
 )
 
 /*

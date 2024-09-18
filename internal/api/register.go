@@ -3,10 +3,11 @@ package api
 import (
 	"context"
 	"encoding/json"
-	"io/ioutil"
-	"loyalty/internal/api/cookie"
-	"loyalty/internal/model"
+	"io"
 	"net/http"
+
+	"github.com/rodeorm/loyalty/internal/api/cookie"
+	"github.com/rodeorm/loyalty/internal/model"
 )
 
 /*
@@ -31,7 +32,7 @@ func (h Handler) registerPost(w http.ResponseWriter, r *http.Request) {
 		500 — внутренняя ошибка сервера.
 	*/
 	user := model.User{}
-	bodyBytes, _ := ioutil.ReadAll(r.Body)
+	bodyBytes, _ := io.ReadAll(r.Body)
 	err := json.Unmarshal(bodyBytes, &user)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)

@@ -3,7 +3,7 @@ package middleware
 import (
 	"net/http"
 
-	cookie "loyalty/internal/api/cookie"
+	cookie "github.com/rodeorm/loyalty/internal/api/cookie"
 )
 
 // AuthMiddleware выполняется для проверки аутентифицирован ли пользователь

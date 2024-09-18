@@ -4,9 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"io/ioutil"
-	"loyalty/internal/api/cookie"
-	"loyalty/internal/model"
 	"net/http"
+
+	"github.com/rodeorm/loyalty/internal/api/cookie"
+	"github.com/rodeorm/loyalty/internal/model"
 )
 
 /*

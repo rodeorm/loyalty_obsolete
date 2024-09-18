@@ -3,7 +3,8 @@ package repo
 import (
 	"context"
 	"log"
-	"loyalty/internal/model"
+
+	"github.com/rodeorm/loyalty/internal/model"
 )
 
 // InsertOrder создает новый заказ

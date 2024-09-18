@@ -2,13 +2,14 @@ package cookie
 
 import (
 	"fmt"
-	"loyalty/internal/model"
 	"net/http"
+
+	"github.com/rodeorm/loyalty/internal/model"
 )
 
 var session string = "domen"
 
-//По хорошему надо делать sessionStore и хранить в куках зашифрованный указатель на сессию, но не успеваю сделать так
+// По хорошему надо делать sessionStore и хранить в куках зашифрованный указатель на сессию, но не успеваю сделать так
 func GetUserKeyFromCoockie(r *http.Request) (string, error) {
 	token, err := r.Cookie(session)
 	if err != nil {

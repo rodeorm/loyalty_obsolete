@@ -4,12 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
-	"loyalty/internal/model"
-	"loyalty/internal/repo"
 	"net/http"
 	"time"
+
+	"github.com/rodeorm/loyalty/internal/model"
+	"github.com/rodeorm/loyalty/internal/repo"
 )
 
 func StartClient(storage repo.Storage, accrualSystemAddress string) {
@@ -32,7 +33,7 @@ func makeGetRequest(storage repo.Storage, accrualSystemAddress string) {
 
 			order := model.ExtOrder{}
 
-			bodyBytes, err := ioutil.ReadAll(r.Body)
+			bodyBytes, err := io.ReadAll(r.Body)
 			defer r.Body.Close()
 			if err != nil {
 				log.Println(err)
