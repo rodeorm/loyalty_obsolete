@@ -1,8 +1,6 @@
 module loyalty
 
-go 1.21
-
-toolchain go1.23.0
+go 1.22
 
 require (
 	github.com/gorilla/mux v1.8.0
